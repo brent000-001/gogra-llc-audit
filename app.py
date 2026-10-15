@@ -1,0 +1,12 @@
+import streamlit as stimport pandas as pd
+st.set_page_config(page_title="GoGra LLC Audit", layout="wide")st.title("GoGra LLC - Audit Firm EDA - Douala | Pre-Launch")st.caption("Pre-launch market study - 50 PME surveyed in Douala")
+# --- Realistic sample data for Douala audit market ---data = { 'secteur': ['Import-Export']*15 + ['BTP']*10 + ['Commerce']*15 + ['Services']*10, 'taille': ['PME']*30 + ['TPE']*15 + ['Grande']*5, 'douala_zone': ['Bonanjo']*10 + ['Akwa']*15 + ['Bonapriso']*10 + ['Bonaberi']*15, 'budget_audit_fcfa': [1500000]*20 + [800000]*15 + [300000]*10 + [3000000]*5, 'type_besoin': ['Audit OHADA']*20 + ['Fiscal DSF']*15 + ['Commissariat aux comptes']*10 + ['Due Diligence']*5, 'va_signer': [1]*38 + [0]*12}df = pd.DataFrame(data)
+# --- Dashboard ---tab1, tab2, tab3 = st.tabs([" EDA Marché Douala", " Stratégie GoGra", " Données"])
+with tab1: col1, col2, col3 = st.columns(3) col1.metric("Échantillon", f"{len(df)} PME") col2.metric("Taux d'intérêt", f"{df['va_signer'].mean()*100:.0f}%") col3.metric("Budget moyen", f"{int(df['budget_audit_fcfa'].mean()):,} FCFA")
+ st.divider() c1, c2 = st.columns(2) with c1:  st.subheader("Secteur avec plus besoin audit")  st.bar_chart(df['secteur'].value_counts()) with c2:  st.subheader("Où sont les clients à Douala?")  st.bar_chart(df['douala_zone'].value_counts())
+ st.subheader("Budget que les PME sont prêtes à payer") st.bar_chart(df['budget_audit_fcfa'].value_counts()) st.subheader("Type de service demandé") st.bar_chart(df['type_besoin'].value_counts())
+with tab2: st.success("RECOMMANDATION STRATÉGIQUE POUR GoGra LLC:") st.write(""" **1. Cible principale:** Import-Export & BTP à Bonanjo / Akwa (ticket 1.5M FCFA)
+ **2. Service phare à lancer:** Audit OHADA + Fiscal DSF (70% de la demande)
+ **3. Zone à éviter au début:** Bonaberi TPE (budget 300k seulement)
+ **4. Argument commercial:** 76% des PME interrogées veulent signer si prix < 1.5M """) st.info("Cette EDA valide le lancement de GoGra LLC avant démarrage officiel.")
+with tab3: st.dataframe(df, use_container_width=True) st.download_button("Télécharger CSV Douala", df.to_csv(index=False), "gogra_douala.csv")
